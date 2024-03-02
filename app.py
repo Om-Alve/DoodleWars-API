@@ -72,6 +72,10 @@ model.eval().cpu()
 model.eval().cpu()
 
 
+@app.route('')
+def home():
+    return "<h1> Working </h1>"
+
 @app.route('/predict', methods=['POST'])
 
 def predict():
