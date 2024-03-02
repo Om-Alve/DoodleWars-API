@@ -71,7 +71,7 @@ model.load_state_dict(torch.load('doodlewarsV2.pth', map_location=torch.device('
 model.eval().cpu()
 
 
-@app.route('')
+@app.route('/')
 def home():
     return "<h1> Working </h1>"
 
