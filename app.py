@@ -67,8 +67,7 @@ class DoodleNet(nn.Module):
         return x
 
 model = DoodleNet()
-model.load_state_dict(torch.load('doodlewarsV2.pth'))
-model.eval().cpu()
+model.load_state_dict(torch.load('doodlewarsV2.pth', map_location=torch.device('cpu')))
 model.eval().cpu()
 
 
