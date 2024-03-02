@@ -94,7 +94,8 @@ def predict():
     # Convert the image to a tensor
     tensor = torch.Tensor(np.array(resized_image_pil)) / 255.0
     # Perform the prediction
-    output = model(tensor.unsqueeze(0).unsqueeze(0))
+    with torch.no_grad():
+        output = model(tensor.unsqueeze(0).unsqueeze(0))
     # Scale the output to the range of 0 to 1
     scaled_output = torch.sigmoid(output[0][object_idx]) * 9 + 1
     print(output.argmax(dim=1))
