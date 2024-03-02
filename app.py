@@ -10,7 +10,6 @@ import re
 
 app = Flask(__name__)
 
-
 labels = ['airplane',
  'bicycle',
  'book',
@@ -67,10 +66,9 @@ class DoodleNet(nn.Module):
         x = self.fc2(x)
         return x
 
-
-
 model = DoodleNet()
 model.load_state_dict(torch.load('doodlewarsV2.pth'))
+model.eval().cpu()
 model.eval().cpu()
 
 
@@ -79,8 +77,9 @@ model.eval().cpu()
 def predict():
     # Get the image data from the request
     image_data = request.form.get('img')
+    object_idx = int(request.form.get('object_idx'))
     image_data = re.sub('^data:image/.+;base64,', '', image_data)
-    
+
     # Convert the base64 string to bytes and then to PIL Image
     image_bytes = base64.b64decode(image_data)
     image_pil = Image.open(BytesIO(image_bytes))
@@ -92,12 +91,15 @@ def predict():
 
     # Convert the image to a tensor
     tensor = torch.Tensor(np.array(resized_image_pil)) / 255.0
-    print(tensor.shape)
-
     # Perform the prediction
     output = model(tensor.unsqueeze(0).unsqueeze(0))
-    # Return the prediction as JSON
-    return jsonify({'score': output.softmax(dim=1).tolist(),'label':labels[output.argmax(dim=1)]})
+    # Scale the output to the range of 0 to 1
+    scaled_output = torch.sigmoid(output[0][object_idx]) * 9 + 1
+    print(output.argmax(dim=1))
+    # Return the scaled prediction as JSON
+    return jsonify({'score': float(scaled_output)})
+
 
 if __name__ == '__main__':
+
     app.run(debug=True)
