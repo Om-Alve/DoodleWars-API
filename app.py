@@ -76,11 +76,10 @@ def home():
     return "<h1> Working </h1>"
 
 @app.route('/predict', methods=['POST'])
-
 def predict():
     # Get the image data from the request
-    image_data = request.form.get('img')
-    object_idx = int(request.form.get('object_idx'))
+    image_data = request.body.get('img')
+    object_idx = int(request.body.get('object_idx'))
     image_data = re.sub('^data:image/.+;base64,', '', image_data)
 
     # Convert the base64 string to bytes and then to PIL Image
