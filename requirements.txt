@@ -2,4 +2,4 @@ Flask==2.0.2
 numpy
 torch
 Pillow
-guinicorn
+gunicorn
