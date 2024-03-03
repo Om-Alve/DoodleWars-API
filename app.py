@@ -7,8 +7,10 @@ from PIL import Image
 from io import BytesIO
 import base64
 import re
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 labels = ['airplane',
  'bicycle',
@@ -92,7 +94,8 @@ def predict():
     resized_image_pil = image_pil.resize(new_size, Image.BICUBIC)
 
     # Convert the image to a tensor
-    tensor = torch.Tensor(np.array(resized_image_pil)) / 255.0
+    tensor = torch.Tensor(np.array(resized_image_pil)) 
+    tensor = tensor / tensor.max()
     # Perform the prediction
     with torch.no_grad():
         output = model(tensor.unsqueeze(0).unsqueeze(0))
