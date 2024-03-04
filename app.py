@@ -98,10 +98,12 @@ def predict():
     tensor = tensor / tensor.max()
     # Perform the prediction
     with torch.no_grad():
-        output = model(tensor.unsqueeze(0).unsqueeze(0))
+        logits = model(tensor.unsqueeze(0).unsqueeze(0))
+    temperature = 1
+    probs = F.softmax(logits / temperature,dim=1)
+    print(probs)
     # Scale the output to the range of 0 to 1
-    scaled_output = torch.sigmoid(output[0][object_idx]) * 9 + 1
-    print(output.argmax(dim=1))
+    scaled_output = probs[0][object_idx] * 9 + 1
     # Return the scaled prediction as JSON
     return jsonify({'score': float(scaled_output)})
 
