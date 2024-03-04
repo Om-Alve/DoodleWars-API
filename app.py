@@ -95,13 +95,12 @@ def predict():
 
     # Convert the image to a tensor
     tensor = torch.Tensor(np.array(resized_image_pil)) 
-    tensor = tensor / tensor.max() if tensor.max() != 0 else 1;
+    tensor = tensor / (tensor.max() if tensor.max() != 0 else 1);
     # Perform the prediction
     with torch.no_grad():
         logits = model(tensor.unsqueeze(0).unsqueeze(0))
     temperature = 1
     probs = F.softmax(logits / temperature,dim=1)
-    print(probs)
     # Scale the output to the range of 0 to 1
     scaled_output = probs[0][object_idx] * 9 + 1
     # Return the scaled prediction as JSON
