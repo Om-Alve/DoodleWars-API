@@ -95,7 +95,9 @@ def predict():
 
     # Convert the image to a tensor
     tensor = torch.Tensor(np.array(resized_image_pil)) 
-    tensor = tensor / (tensor.max() if tensor.max() != 0 else 1);
+    if tensor.max() == 0:
+        return jsonify({'score': 0.0})
+    tensor = tensor / tensor.max();
     # Perform the prediction
     with torch.no_grad():
         logits = model(tensor.unsqueeze(0).unsqueeze(0))
