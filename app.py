@@ -102,7 +102,7 @@ def predict():
     scaled_output = probs[0][object_idx] * 9 + 1
 
     # Return the scaled prediction as JSON
-    return jsonify({'score': float(scaled_output)})
+    return jsonify({'score': round(float(scaled_output), 4)})
 
 if __name__ == '__main__':
     app.run(debug=True)
