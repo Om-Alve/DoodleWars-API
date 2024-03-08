@@ -55,7 +55,7 @@ class DoodleNet(Module):
 
 # Load the trained model
 model = DoodleNet()
-model.load_state_dict(load('doodlewarsV2.pth', map_location=device('cpu')))
+model.load_state_dict(load('DoodleWars-API/doodlewarsV2.pth', map_location=device('cpu')))
 model.eval().cpu()
 
 @app.route('/')
